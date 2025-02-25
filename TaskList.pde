@@ -15,7 +15,7 @@ class TaskList extends Panel {
    public void add(Task task){
        if (task == null) return;
        task.setLocation(10, 10 + controls.size() * (45 + 10));
-       task.setSize(this.w - this.padding.horizontal() - 20, 45);
+       task.setSize(this.w - this.padding.horizontal() - 20, 35);
        controls.add(task);
    }
 }

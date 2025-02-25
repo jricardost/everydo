@@ -1,4 +1,4 @@
-static class Constants {
+interface Constants {
 
   static int PRIORITY_HIGH = 0;
   static int PRIORITY_MEDIUM = 1;
