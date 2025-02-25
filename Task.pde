@@ -13,9 +13,15 @@ class Task extends Panel implements Constants {
   private String timestamp;
   private String category;
 
+  public int backColor = #F0F0F0;
+  public int hoverBackColor = #AAAAAA;
+  public float borderRadius = 3.0f;
+
+
   CheckBox check1;
   Button button1;
   Button button2;
+  Button button3;
   Label label1;
   Label label2;
   Label label3;
@@ -23,6 +29,15 @@ class Task extends Panel implements Constants {
 
   public Task() {
     this(0, 0);
+  }
+
+  public Task(String name, int priority, String category, String deadline, String comment) {
+    this(0, 0);
+    setName(name);
+    setPriority(priority);
+    setCategory(category);
+    setComment(comment);
+    setDeadline(deadline);
   }
 
   public Task(int x, int y) {
@@ -60,6 +75,14 @@ class Task extends Panel implements Constants {
     button2.onClick = new Event(this, "onPriorityClick");
     controls.add(button2);
 
+    button3 = new Button();
+    button3.setText("deadline");
+    button3.backColor = WHITE;
+    button3.hoverBackColor = WHITE;
+    button3.textColor = BLUE;
+    button3.hoverTextColor = BLUE;
+    controls.add(button3);
+
     label2 = new Label();
     label2.setText("25/02/2025");
     label2.setTextAlign(LEFT, CENTER);
@@ -71,7 +94,7 @@ class Task extends Panel implements Constants {
     label3.setTextAlign(LEFT, CENTER);
     label3.textColor = #000000;
     controls.add(label3);
-    
+
     setLocation(x, y);
     setSize(w, h);
   }
@@ -82,31 +105,42 @@ class Task extends Panel implements Constants {
     super.setSize(w, h);
 
     if (check1 != null) {
-      check1.setSize(h - padding.vertical(), h - padding.vertical());
+      check1.setSize((h - padding.vertical()) * .75f, (h - padding.vertical()) * .75f);
+      check1.setLocation(check1.x, (h - padding.vertical() - check1.h) / 2);
+      check1.borderRadius = 3;
     }
 
     if (label1 != null) {
-      label1.setLocation(check1.x + check1.w + 10, check1.y);
-      label1.setSize(125, check1.h);
-      label1.setTextSize(int(check1.h * 0.7f));
+      label1.setLocation(check1.x + check1.w + 10, 0);
+      label1.setSize(125, h - padding.vertical());
+      label1.setTextSize(int(label1.h * 0.7f));
     }
 
     if (button1 != null) {
-      button1.setLocation(label1.x + label1.w + 10, check1.y);
-      button1.setSize(100, check1.h);
-      button1.setTextSize(int(check1.h * 0.7f));
+      button1.setLocation(label1.x + label1.w + 10, label1.y);
+      button1.setSize(100, label1.h);
+      button1.setTextSize(label1.textSize);
+      button1.borderRadius = 5.0f;
     }
 
     if (button2 != null) {
-      button2.setLocation(button1.x + button1.w + 10, button1.y);
-      button2.setSize(100, check1.h);
-      button2.setTextSize(int(check1.h * 0.7f));
+      button2.setLocation(button1.x + button1.w + 10, label1.y);
+      button2.setSize(100, label1.h);
+      button2.setTextSize(label1.textSize);
+      button2.borderRadius = 5.0f;
     }
-    
+
+    if (button3 != null) {
+      button3.setLocation(button2.x + button2.w + 10, label1.y);
+      button3.setSize(100, label1.h);
+      button3.setTextSize(label1.textSize);
+      button3.borderRadius = 5.0f;
+    }
+
     if (label3 != null) {
-      label3.setLocation(button2.x + button2.w + 10, button2.y);
-      label3.setSize(125, check1.h);
-      label3.setTextSize(int(check1.h * 0.7f));
+      label3.setLocation(button3.x + button3.w + 10, label1.y);
+      label3.setSize(w - x - padding.horizontal(), label1.h);
+      label3.setTextSize(label1.textSize);
     }
   }
 
@@ -115,7 +149,7 @@ class Task extends Panel implements Constants {
 
     push();
 
-    background(#F2F2F2);
+    background(borderRadius, backColor);
 
     super.drawChildControls();
 
@@ -127,8 +161,30 @@ class Task extends Panel implements Constants {
     priority += 1;
     if (priority > PRIORITY_LOW) priority = PRIORITY_HIGH;
 
+    setPriority(priority);
+  }
+
+  public void setName(String name) {
+    label1.setText(name);
+  }
+
+  public void setPriority(int priority) {
+    this.priority = priority;
+
     button1.backColor = priorityColors[priority];
     button1.hoverBackColor = priorityColors[priority];
     button1.setText(priorityLabels[priority]);
+  }
+
+  public void setCategory(String category) {
+    button2.setText(category);
+  }
+
+  public void setComment(String comment) {
+    this.label3.setText(comment);
+  }
+  
+  public void setDeadline(String deadline){
+     this.button3.setText(deadline);
   }
 }
